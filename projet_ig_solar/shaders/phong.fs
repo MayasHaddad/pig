@@ -1,0 +1,27 @@
+#version 120
+
+uniform sampler2D image0; 
+uniform sampler2D image1; 
+uniform int time; 
+varying vec3 normal;
+varying vec3 dirlight;
+varying vec3 direye;
+varying vec2 texcoord;
+
+void main()
+{
+  vec3 N = normalize(normal);
+  vec3 L = normalize(dirlight);
+  vec3 V = normalize(direye);
+  vec4 texcol0 = texture2D(image0,texcoord+vec2(time*0.000002,0));  
+  vec4 texcol1 = texture2D(image1,texcoord+vec2(time*0.000006,0));
+
+  vec3 Kd = mix(texcol0.rgb,texcol1.rgb,texcol1.a);
+  vec3 Ks = vec3(1,1,1);
+  
+  vec3 Ia = 0.1 * Kd;
+  vec3 Id = 0.9*Kd*max(0,dot(N,L));
+  vec3 Is = 0.9*Ks*pow(max(0,dot(normalize(L+V),N)),80);
+  
+  gl_FragColor = vec4(Ia+Id+Is,1);
+}

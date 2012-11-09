@@ -1,0 +1,8 @@
+gcc -LGLEW -lGL -lGLU -lglut depart.c -o ig
+g++ -lglut -lGL -lGLU -lGLEW depart.c -o ig
+g++ -lglut -lGL -lGLU -lGLEW `libpng12-config --libs` -lz  depart.c -o ig
+planet: png.o shader.o depart.o
+	$(CPP) -o planet png.o shader.o depart.o $(LDFLAGS)
+
+png.o: png.c
+	$(CPP) -o png.o -c png.c $(CFLAGS)
